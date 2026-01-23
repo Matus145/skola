@@ -1,0 +1,22 @@
+
+import tkinter as tk
+print (tk.TkVersion)
+
+root = tk.Tk()
+root.title ("Main frame")
+root.geometry("800x800")
+
+entry = tk.Entry(root)
+entry.pack(pady=10)
+
+def rekcia_tlacidla():
+    text = entry.get
+    label.config(text=f"Priklad: {text}, vysledok: {eval(text)}")
+
+btn = tk.Button(root, text="Potvrď vloženie", command=rekcia_tlacidla )
+btn.pack()
+
+label= tk.Label()
+label.pack(pady=10)
+
+root.mainloop()
