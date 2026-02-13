@@ -9,22 +9,63 @@ tlacidla = [
     ("=", 5, 0, 4)
 ]
 
+
 root = ttk.Tk()
 root.title("Kalkulačka")
 root.geometry("300x400")
 
 entry_var = ttk.StringVar()
 entry = ttk.Entry(root, textvariable= entry_var, font= ("Arial", 20), justify= "right")
-entry.grid(row=0, column=0, columnspan=4, padx= 5, pady= 5)
+entry.grid(row=0, column=0, columnspan=4, padx= 5, pady= 5, sticky= "nsew")
 
 def pridaj_znak(znak):
     entry_var.set(entry_var.get()+str(znak))
 
 def pocitaj():
-    pass
+    data = []
+    for op in ops:
+        if op in entry_var.get():
+            data = [float(value) for value in entry_var.get().split(op)]
+            print (data)
+            try:
+                entry_var.set(ops[op](data[0], data[1]))
+            except ValueError as chyba:
+                print(f"Detekcia chyby: {chyba}")
+                entry_var.set(chyba)
 
 def vycisti():
     entry_var.set("")
+
+def sucet(a, b):
+    return a + b
+
+def rozdiel(a, b):
+    return  a - b
+
+def delenie(a, b):
+    if b == 0:
+        raise ValueError("Delenie nulou.")
+    return a / b
+
+def mocnina(a, b):
+    return a**b
+
+def odmocnina(a, b):
+    return 
+
+def nasobenie(a, b):
+    return a * b
+
+ops = {
+    "+": sucet,
+    "-": rozdiel,
+    "*": nasobenie,
+    "/": delenie
+}
+
+def key_pressed(event):
+    entry_var.set(entry_var.get()+event.char)
+root.bind("<Key>", key_pressed)
 
 for btn in tlacidla:
     text = btn[0]
@@ -36,9 +77,9 @@ for btn in tlacidla:
         col_span = 1
 
     if text == "=":
-        b = ttk.Button(root,text=text, font=("Arial", 20),command= pocitaj)
+        b = ttk.Button(root,text=text, font=("Arial", 20),command= pocitaj, fg= "black", bg="lightgreen")
     elif text == "C":
-        b= ttk.Button(root)
+        b= ttk.Button(root, text=text, font=("Arial", 20),command= vycisti, fg= "black", bg= "red")
 
     else:
         b = ttk.Button(root, text=text, font= ("Arial", 18), command= lambda t=text : pridaj_znak(t))
