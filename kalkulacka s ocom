@@ -27,7 +27,7 @@ def clear():
 def vypocet():
     text = entry_var.get()
 
-    operatory = [ "+" , "-", "*", "/"]
+    operatory =  ["+", "-", "*", "/"]
 
     for o in operatory:
         if o in text:
@@ -60,8 +60,7 @@ def rozdiel(a,b):
 def delenie(a,b):
     if b == 0:
         return "delenie nulou"
-    else:
-        return a / b
+    return a / b
 
 def nasobenie(a, b):
     return a * b
