@@ -14,3 +14,14 @@ def delenie(a,b):
 def nasobenie(a, b):
     return a * b
 
+def mocnina(a,b):
+    return a ** b
+
+import math
+
+def odmocnina(a):
+    return math.sqrt(a)
+
+def odmocnina_cis(a):
+    return a ** 0.5
+
