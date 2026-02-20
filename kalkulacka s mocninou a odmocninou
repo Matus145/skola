@@ -1,12 +1,15 @@
 
 import tkinter as ttk
 
+import math
+
 tlacidla = [
     ("7", 1, 0), ("8", 1, 1), ("9", 1, 2), ("/", 1, 3),
     ("4", 2, 0), ("5", 2, 1), ("6", 2, 2), ("*", 2, 3),
     ("1", 3, 0), ("2", 3, 1), ("3", 3, 2), ("-", 3, 3),
-    ("0", 4, 0), (".", 4, 1), ("C", 4, 2), ("+", 4, 3),
-    ("=", 5, 0, 4)
+    ("^", 4, 0), ("0", 4, 1), ("√", 4, 2), ("+", 4, 3),
+    (".", 5, 0), ("C", 5, 1, 3),
+    ("=", 6, 0, 4)
 ]
 
 
@@ -25,10 +28,13 @@ def pocitaj():
     data = []
     for op in ops:
         if op in entry_var.get():
-            data = [float(value) for value in entry_var.get().split(op)]
+            data = [value for value in entry_var.get().split(op)]
             print (data)
             try:
-                entry_var.set(ops[op](data[0], data[1]))
+                if op == "√":
+                    entry_var.set(ops[op](float(data[1])))
+                else:
+                    entry_var.set(ops[op](float(data[0]), float(data[1])))
             except ValueError as chyba:
                 print(f"Detekcia chyby: {chyba}")
                 entry_var.set(chyba)
@@ -50,8 +56,8 @@ def delenie(a, b):
 def mocnina(a, b):
     return a**b
 
-def odmocnina(a, b):
-    return 
+def odmocnina(a):
+    return math.sqrt(a)
 
 def nasobenie(a, b):
     return a * b
@@ -60,11 +66,14 @@ ops = {
     "+": sucet,
     "-": rozdiel,
     "*": nasobenie,
-    "/": delenie
+    "/": delenie,
+    "^": mocnina,
+    "√": odmocnina
 }
 
 def key_pressed(event):
     entry_var.set(entry_var.get()+event.char)
+
 root.bind("<Key>", key_pressed)
 
 for btn in tlacidla:
