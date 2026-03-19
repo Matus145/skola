@@ -1,0 +1,77 @@
+
+import tkinter as tk
+import secrets  # Bezpečnejšie ako random
+import string
+from tkinter import messagebox
+
+punctuation_less = "!#$%&*/@"  # Bez zbytočných znakov, ktoré môžu spôsobovať problémy
+def generate_password(length = 8, punct_count = 2):
+    # Definícia znakov
+    if length < 8 or length > 32:
+            messagebox.showwarning("POZOR", "Délka hesla musi byt medzi 8 a 32 znaky.")
+    elif punct_count < 2 or punct_count > 5:
+            messagebox.showwarning("POZOR", "Počet speciálních znaků by mal byt mezi 2 az 5.")
+    try:
+        # 1. Vygeneruj znaky ako ZOZNAMY (nie stringy)
+        symboly = [secrets.choice(punctuation_less) for _ in range(punct_count)]
+        alphabet = string.ascii_letters + string.digits
+        zaklad = [secrets.choice(alphabet) for _ in range(length - punct_count)]
+        
+        # 2. Spoj tieto dva zoznamy do jedného
+        full_password_list = symboly + zaklad
+        
+        # 3. Premiešaj ZOZNAM (toto funguje)
+        secrets.SystemRandom().shuffle(full_password_list)
+        
+        # 4. Až teraz to spoj do finálneho stringu
+        final_password = "".join(full_password_list)
+        password_var.set(final_password)
+    except Exception as e:
+        messagebox.showerror("Chyba", f"Nastala chyba při generování hesla: {e}")
+    
+       
+        
+
+def copy_to_clipboard():
+    pwd = password_var.get()
+    if pwd:
+        root.clipboard_clear()
+        root.clipboard_append(pwd)
+        messagebox.showinfo("OK", "Heslo bolo skopírované!")
+    else:
+        messagebox.showwarning("Pozor", "Najprv vygeneruj heslo.")
+
+# Nastavenie okna
+root = tk.Tk()
+root.title("Pro Password Generator")
+root.geometry("400x300")
+root.padx = 20 # Vnútorný padding okna (simulovaný)
+
+# UI Prvky
+tk.Label(root, text="Dĺžka hesla:", font=("Arial", 10)).pack(pady=(10, 0))
+length_spin = tk.Spinbox(root, from_=8, to=32, width=5)
+length_spin.delete(0, "end")
+length_spin.insert(0, "16")
+length_spin.pack(pady=5)
+
+tk.Label(root, text="Počet speciálních znaků:", font=("Arial", 10)).pack(pady=(10, 0))
+punct_spin = tk.Spinbox(root, from_=0, to=5, width=5)
+punct_spin.delete(0, "end")
+punct_spin.insert(0, "2")
+punct_spin.pack(pady=5)
+
+
+password_var = tk.StringVar()
+entry = tk.Entry(root, textvariable=password_var, font=("Consolas", 12), width=30, justify="center")
+entry.pack(pady=15)
+
+btn_frame = tk.Frame(root)
+btn_frame.pack(pady=10)
+
+generate_btn = tk.Button(btn_frame, text="Generovať", command=lambda: generate_password(int(length_spin.get()), int(punct_spin.get())), bg="#4CAF50", fg="white", width=12)
+generate_btn.pack(side="left", padx=5)
+
+copy_btn = tk.Button(btn_frame, text="Kopírovať", command=copy_to_clipboard, width=12)
+copy_btn.pack(side="left", padx=5)
+
+root.mainloop()
