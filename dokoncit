@@ -1,0 +1,40 @@
+
+import tkinter as tk
+import secrets
+import string
+from tkinter import messagebox
+
+root = tk.Tk()
+root.title("Generovanie hesiel")
+root.geometry("400x300")
+
+tk.Label(root, text="Vyber dĺžku hesla:").grid(row=0,column=0,sticky="nsew")
+tk.Spinbox(root,from_=8, to=32).grid(row=1,column=0,sticky="ns",columnspan=2)
+
+label = tk.Label(root, text="Vyber počet špeciálnych znakov:").grid(row=2,sticky="nsew",column=0)
+tk.Spinbox(root,from_=2, to=5).grid(row=3,column=0,sticky="ns",columnspan=2)
+
+tk.Label(root, text="Generovanie").grid(row=4,column=0,sticky="nsew")
+entry = tk.Entry().grid(row=5,column=0,columnspan=4,sticky="nsew")
+
+
+
+password_var = tk.StringVar()
+
+def generovanie_hesiel(lenght = 8, punct_count = 2):
+    punct = "@€#/*!"
+    if lenght < 8 or 32 < lenght  :
+        messagebox.showwarning("Heslo musí byť medzi 8 až 32 znakmi")
+    elif punct_count < 2 or 5 < punct_count :
+        messagebox.showwarning("Špecialných znakov musí byť medzi 2 až 5")
+    try:
+        alphabet = string.ascii_letters + string.digits + string.punctuation
+        full_password = password
+        password = "".join(secrets.choice(alphabet) for _ in range (lenght))
+    except ValueError:
+        pass
+
+btn_generovanie = tk.Button(text="Generovať", command=lambda: generovanie_hesiel ).grid(row=6,column=0,columnspan=4,sticky="w")
+btn_kopirovanie = tk.Button(text="Kopírovať").grid(row=6,column=1,columnspan=4,sticky="e")
+
+root.mainloop()
