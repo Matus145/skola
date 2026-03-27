@@ -1,0 +1,49 @@
+
+class Ziak:
+
+    def __init__(self, meno, priezvisko, vek, trieda, pohlavie):
+        self._meno = meno #konstruktor/metody
+        self._priezvisko = priezvisko
+        self._vek = vek
+        self._trieda = trieda
+        self._pohlavie = pohlavie
+        self._vysledky = {}
+    
+    def get_meno(self):
+        return self._meno
+    
+    def set_priezvisko(self, nove_priezvisko):
+        self._priezvisko = nove_priezvisko
+    
+    def get_priezvisko(self):
+        return self._priezvisko
+    
+    def get_pohlavie(self):
+        return self._pohlavie
+    
+    def set_vek(self, novy_vek):
+        self._vek = novy_vek
+        
+    def get_vek(self):
+        return self._vek
+    
+    def set_trieda(self, trieda):
+        self._trieda = trieda
+    
+    def get_trieda(self):
+        return self._trieda
+    
+    def get_data(self):
+        print(f"Ziak: {self._meno} {self._priezvisko}, ma {self._vek} rokov, je {"zena" if self._pohlavie==1 else "muz"} a je v triede {self._trieda}")
+
+ziak1 = Ziak("tomas", "polak", 15, "1.AT", 0)
+ziak1.get_data()
+
+ziak2 = Ziak("kristina", "kamenicka", 16, "1.AT", 1)
+ziak2.get_data()
+ziak2.set_priezvisko("dolinarova")
+ziak2.get_data()
+
+ziak1.set_vek(18)
+ziak1.set_trieda("3.AT")
+ziak1.get_data()
