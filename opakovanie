@@ -1,0 +1,12 @@
+
+j = 0
+for i in range(0, 10):
+    if j > 2 :
+        continue
+    if i % 2 :
+        print(f"neparne {i}")
+    else :
+        print(f"parne {i}")
+        j += 1
+    if i > 7:
+        break
