@@ -47,3 +47,39 @@ ziak2.get_data()
 ziak1.set_vek(18)
 ziak1.set_trieda("3.AT")
 ziak1.get_data()
+
+class Trieda():
+
+    def __init__(self, index_triedy , triedny_ucitel, ucebna) -> None:
+        self._index = index_triedy
+        self._triedny_ucitel = triedny_ucitel
+        self._ucebna = ucebna
+        self._ziaci = []
+    #Property - get
+    def get_index(self) -> str:
+        return self._index 
+    
+    def get_triedny(self) -> str:
+        return self._triedny_ucitel
+    
+    def get_ucebna(self) -> int:
+        return self._ucebna
+    
+    def get_ziaci(self) -> str:
+        return self._ziaci
+    #Property - set
+    def set_index(self, new_index):
+        self._index = new_index
+
+    def set_triedny(self, new_triedny_ucitel):
+        self._triedny_ucitel = new_triedny_ucitel
+
+    def set_ucebna(self, new_ucebna):
+        self._ucebna = new_ucebna
+#Objekty
+        def get_data(self):
+            return f""
+        
+first_class_obj = Trieda("1.AT", "Janko Hrasko", 304)
+
+    
