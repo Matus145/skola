@@ -1,4 +1,42 @@
 
+class Ucitel:
+
+    def __init__(self, meno, priezvisko, vek, trieda, pohlavie):
+        self._meno = meno #konstruktor/metody
+        self._priezvisko = priezvisko
+        self._vek = vek
+        self._trieda = trieda
+        self._pohlavie = pohlavie
+        self._vysledky = {}
+    
+    def get_meno(self):
+        return self._meno
+    
+    def set_priezvisko(self, nove_priezvisko):
+        self._priezvisko = nove_priezvisko
+    
+    def get_priezvisko(self):
+        return self._priezvisko
+    
+    def get_pohlavie(self):
+        return self._pohlavie
+    
+    def set_vek(self, novy_vek):
+        self._vek = novy_vek
+        
+    def get_vek(self):
+        return self._vek
+    
+    def set_trieda(self, trieda):
+        self._trieda = trieda
+    
+    def get_trieda(self):
+        return self._trieda
+    
+    def get_data(self):
+        print(f"Ucitel: {self._meno} \
+              {self._priezvisko}, ma {self._vek} rokov, je {"zena" if self._pohlavie==1 else "muz"} a je ucitel v triede {self._trieda}")
+
 class Ziak:
 
     def __init__(self, meno, priezvisko, vek, trieda, pohlavie):
@@ -36,17 +74,6 @@ class Ziak:
     def get_data(self):
         print(f"Ziak: {self._meno} {self._priezvisko}, ma {self._vek} rokov, je {"zena" if self._pohlavie==1 else "muz"} a je v triede {self._trieda}")
 
-ziak1 = Ziak("tomas", "polak", 15, "1.AT", 0)
-ziak1.get_data()
-
-ziak2 = Ziak("kristina", "kamenicka", 16, "1.AT", 1)
-ziak2.get_data()
-ziak2.set_priezvisko("dolinarova")
-ziak2.get_data()
-
-ziak1.set_vek(18)
-ziak1.set_trieda("3.AT")
-ziak1.get_data()
 
 class Trieda():
 
@@ -65,8 +92,18 @@ class Trieda():
     def get_ucebna(self) -> int:
         return self._ucebna
     
+    def get_triedny_ucitel(self):
+        ucitel = self._triedny_ucitel.get_meno() + " " + self._triedny_ucitel.get_priezvisko()
+        return ucitel
+    #Metoda
     def get_ziaci(self) -> str:
-        return self._ziaci
+        ziaci = []
+        for item in self._ziaci:
+            ziaci.append(item.get_meno() + " " + item.get_priezvisko())
+        return ziaci
+    #Metoda
+    def add_student(self, new_ziak):
+        self._ziaci.append(new_ziak)
     #Property - set
     def set_index(self, new_index):
         self._index = new_index
@@ -77,9 +114,30 @@ class Trieda():
     def set_ucebna(self, new_ucebna):
         self._ucebna = new_ucebna
 #Objekty
-        def get_data(self):
-            return f""
-        
-first_class_obj = Trieda("1.AT", "Janko Hrasko", 304)
+    def get_data(self):
+            return f"\
+            \r Trieda {self.get_index()}. \n \
+            \r Triedny ucitel: {self.get_triedny_ucitel()}. \n \
+            \r Ucebna: {self.get_ucebna()}. \n \
+            \r Ziaci: \n {self.get_ziaci()}"
 
-    
+ziak1 = Ziak("tomas", "polak", 15, "1.AT", 0)
+ziak1.get_data()
+
+ziak2 = Ziak("kristina", "kamenicka", 16, "1.AT", 1)
+ziak2.get_data()
+ziak2.set_priezvisko("dolinarova")
+ziak2.get_data()
+
+ziak1.set_vek(18)
+ziak1.set_trieda("3.AT")
+ziak1.get_data()
+
+ucitel = Ucitel("Simon", "Novak", 30, "1.AT", 0)
+print(ucitel.get_data())
+
+first_class_obj = Trieda("1.AT", ucitel, 304)
+print(first_class_obj.get_data())
+first_class_obj.add_student(ziak1)
+first_class_obj.add_student(ziak2)
+print(first_class_obj.get_data())
