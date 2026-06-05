@@ -12,7 +12,7 @@ entry = tk.Entry(root)
 
 class Hotel:
     
-    def __init__(self, cena, postele, velkost, kupelna):
+    def __init__(self, cena, postele, velkost, kupelna, minibar, klima):
         pass
 
 class Izba:
