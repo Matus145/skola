@@ -1,1 +1,28 @@
 
+import tkinter as tk
+import tkinter.ttk as ttk
+import math
+
+root = tk.Tk()
+root.title("HOTEL MM")
+root.geometry("400x400")
+
+entry_var = tk.StringVar()
+entry = tk.Entry(root)
+
+class Hotel:
+    
+    def __init__(self, cena, postele, velkost, kupelna):
+        pass
+
+class Izba:
+    pass
+
+class Standart_Izba:
+    pass
+
+class Apartman:
+    pass
+
+
+root.mainloop()
