@@ -1,4 +1,5 @@
 
+#BANKAI!!!, Tensa Zangetsu
 import tkinter as tk
 from tkinter import ttk
 import math
@@ -9,7 +10,7 @@ root.geometry("800x800")
 root.state("zoomed")
 
 entry_var = tk.StringVar()
-entry = tk.Entry(root, textvariable= entry_var, font=("Arial", 20), fg= "black", bg= "white")
+entry = tk.Entry(root, textvariable= entry_var, font=("Arial", 40), fg= "black", bg= "white")
 entry.place(anchor= "n", relx=0.5, y=0, width=400, height=60)
 
 btn1 = tk.Button(root)
