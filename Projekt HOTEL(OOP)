@@ -10,12 +10,12 @@ root.geometry("800x800")
 root.state("zoomed")
 
 entry_var = tk.StringVar()
-entry = tk.Entry(root, textvariable= entry_var, font=("Arial", 40), fg= "black", bg= "white")
+entry = tk.Entry(root, textvariable= entry_var, font=("Arial", 25), fg= "black", bg= "white")
 entry.place(anchor= "n", relx=0.5, y=0, width=400, height=60)
 
 btn1 = tk.Button(root)
 
-izby_options = ["Štandart", "Apartmán", "Izba"]
+izby_options = ["Základná", "Štandart", "Apartmán"]
 combo_b_var = tk.StringVar()
 combo_b1 = ttk.Combobox(root, textvariable= combo_b_var, values= izby_options,font=("Arial", 20), width=30, height=50)
 combo_b1.place(x=50 ,y=150)
