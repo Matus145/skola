@@ -1,0 +1,183 @@
+
+import tkinter as tk
+from tkinter import ttk
+
+
+class HotelRoom:
+    def __init__(self, name: str, price: float, beds: int, size_m2: float,
+                 bathroom: bool, minibar: bool, air_conditioning: bool):
+        self.name = name
+        self.price = price
+        self.beds = beds
+        self.size_m2 = size_m2
+        self.bathroom = bathroom
+        self.minibar = minibar
+        self.air_conditioning = air_conditioning
+
+    def get_info(self) -> str:
+        """Return a formatted string with room information (polymorphic target)."""
+        amenities = []
+        if self.bathroom:
+            amenities.append("Bathroom")
+        if self.minibar:
+            amenities.append("Minibar")
+        if self.air_conditioning:
+            amenities.append("Air conditioning")
+
+        return (
+            f"{self.name}\n"
+            f"Price: {self.price:.2f} € per night\n"
+            f"Beds: {self.beds}\n"
+            f"Size: {self.size_m2} m²\n"
+            f"Amenities: {', '.join(amenities) if amenities else 'None'}"
+        )
+
+
+class ZakladnaRoom(HotelRoom):
+    def get_info(self) -> str:
+        base = super().get_info()
+        return base + "\nDescription: Basic comfortable room suitable for a short stay."
+
+
+class StandartRoom(HotelRoom):
+    def get_info(self) -> str:
+        base = super().get_info()
+        return base + "\nDescription: Standard room with extra comfort and amenities."
+
+
+class ApartmanRoom(HotelRoom):
+    def __init__(self, *args, living_area_m2: float = 12.0, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.living_area_m2 = living_area_m2
+
+    def get_info(self) -> str:
+        base = super().get_info()
+        return base + f"\nLiving area: {self.living_area_m2} m²\nDescription: Spacious apartment with separate living area."
+
+
+def create_rooms():
+    rooms = {
+        "Základná": ZakladnaRoom(
+            name="Základná",
+            price=45.0,
+            beds=1,
+            size_m2=14,
+            bathroom=True,
+            minibar=False,
+            air_conditioning=False,
+        ),
+        "Štandart": StandartRoom(
+            name="Štandart",
+            price=70.0,
+            beds=2,
+            size_m2=20,
+            bathroom=True,
+            minibar=True,
+            air_conditioning=True,
+        ),
+        "Apartmán": ApartmanRoom(
+            name="Apartmán",
+            price=120.0,
+            beds=2,
+            size_m2=40,
+            bathroom=True,
+            minibar=True,
+            air_conditioning=True,
+            living_area_m2=18.0,
+        ),
+    }
+    return rooms
+
+
+def build_gui(rooms: dict):
+    root = tk.Tk()
+    root.title("HOTEL MM - Room picker")
+    root.geometry("800x600")
+
+    header = tk.Label(root, text="Choose a room to see details", font=("Arial", 20))
+    header.pack(pady=12)
+
+    # Combobox selection
+    combo_var = tk.StringVar()
+    combo = ttk.Combobox(root, textvariable=combo_var, values=list(rooms.keys()), font=("Arial", 16))
+    combo.state(["readonly"])
+    combo.pack(pady=6)
+
+    # Buttons for each room (alternate selection method)
+    btn_frame = tk.Frame(root)
+    btn_frame.pack(pady=6)
+    for name, room in rooms.items():
+        b = tk.Button(btn_frame, text=name, width=12, font=("Arial", 12),
+                      command=lambda r=room: show_room_info(r, info_label))
+        b.pack(side="left", padx=6)
+
+    # Show info button for combobox
+    def on_show_button():
+        name = combo_var.get()
+        if name in rooms:
+            show_room_info(rooms[name], info_label)
+
+    show_btn = tk.Button(root, text="Show info", command=on_show_button, font=("Arial", 12))
+    show_btn.pack(pady=6)
+
+    # Controls for price calculation: number of rooms and nights
+    calc_frame = tk.Frame(root)
+    calc_frame.pack(pady=6)
+
+    tk.Label(calc_frame, text="Rooms:", font=("Arial", 12)).pack(side="left", padx=(0,4))
+    rooms_spin = tk.Spinbox(calc_frame, from_=1, to=10, width=4, font=("Arial", 12))
+    rooms_spin.pack(side="left", padx=(0,12))
+
+    tk.Label(calc_frame, text="Nights:", font=("Arial", 12)).pack(side="left", padx=(0,4))
+    nights_spin = tk.Spinbox(calc_frame, from_=1, to=30, width=4, font=("Arial", 12))
+    nights_spin.pack(side="left", padx=(0,12))
+
+    def calculate_price():
+        name = combo_var.get()
+        if not name:
+            info_label.config(text="Please select a room first.")
+            price_label.config(text="")
+            return
+        try:
+            count = int(rooms_spin.get())
+            nights = int(nights_spin.get())
+        except ValueError:
+            price_label.config(text="Invalid number of rooms or nights.")
+            return
+        room = rooms.get(name)
+        if not room:
+            price_label.config(text="Selected room not found.")
+            return
+        total = room.price * count * nights
+        price_label.config(text=f"Total for {count} room(s) for {nights} night(s): {total:.2f} €")
+
+    calc_btn = tk.Button(calc_frame, text="Calculate price", command=calculate_price, font=("Arial", 12))
+    calc_btn.pack(side="left", padx=(8,0))
+
+    # Information display
+    info_label = tk.Label(root, text="No room selected", font=("Arial", 14), justify="left", anchor="nw")
+    info_label.pack(fill="both", expand=True, padx=20, pady=12)
+
+    price_label = tk.Label(root, text="", font=("Arial", 14), fg="green")
+    price_label.pack(fill="x", padx=20, pady=(0,12))
+
+    # Bind combobox selection to update immediate preview
+    def on_combo_changed(event):
+        selected = combo_var.get()
+        if selected in rooms:
+            show_room_info(rooms[selected], info_label)
+
+    combo.bind("<<ComboboxSelected>>", on_combo_changed)
+
+    root.mainloop()
+
+
+def show_room_info(room: HotelRoom, label: tk.Label):
+    label.config(text=room.get_info())
+
+
+if __name__ == "__main__":
+    rooms = create_rooms()
+    build_gui(rooms)
+
+        
