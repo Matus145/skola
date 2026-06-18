@@ -170,4 +170,3 @@ if __name__ == "__main__":
     izby = tvorenie_izieb()
     tvorenie_gui(izby)
 
-
