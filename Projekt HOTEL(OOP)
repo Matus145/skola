@@ -4,16 +4,33 @@ from tkinter import ttk
 
 class Hotel:
 
-    def __init__(self, druh_izby: str,cena: float, velkosť_m2: float, postele: int,
-                 minibar: bool, klíma: bool, vaňa: bool):
+    def __init__(self, meno: str,cena: float, velkost_m2: float, postele: int,
+                 minibar: bool, klima: bool, vana: bool):
         
-        self.druh_izby = druh_izby
+        self.meno = meno
         self.cena = cena
-        self.veľkosť = velkosť_m2
+        self.velkost = velkost_m2
         self.postele = postele
         self.minibar = minibar
-        self.klíma = klíma
-        self.vaňa = vaňa
+        self.klima = klima
+        self.vana = vana
 
-        
+        def get_info(self) -> str:
+            doplnky = []
+            if self.vaňa:
+                doplnky.append("Vaňa")
+            elif self.minibar:
+                doplnky.append("Minibar")
+            elif self.klima:
+                doplnky.append("Klíma")
+
+        return (
+            f"{self.meno}\n",
+            f"Cena: {self.cena}€ za noc\n",
+            f"Veľkosť izby: {self.velkost_m2}\n",
+            f"Počeť postelí: {self.postele} m²\n",
+            f"Doplnky: {','.join(doplnky) if doplnky else 'Žiadne'}"
+        )
+
+
         pass
