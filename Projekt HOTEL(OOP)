@@ -1,38 +1,19 @@
 
-#BANKAI!!!, Tensa Zangetsu
 import tkinter as tk
 from tkinter import ttk
-import math
-
-root = tk.Tk()
-root.title("HOTEL MM")
-root.geometry("800x800")
-root.state("zoomed")
-
-entry_var = tk.StringVar()
-entry = tk.Entry(root, textvariable= entry_var, font=("Arial", 25), fg= "black", bg= "white")
-entry.place(anchor= "n", relx=0.5, y=0, width=400, height=60)
-
-btn1 = tk.Button(root)
-
-izby_options = ["Základná", "Štandart", "Apartmán"]
-combo_b_var = tk.StringVar()
-combo_b1 = ttk.Combobox(root, textvariable= combo_b_var, values= izby_options,font=("Arial", 20), width=30, height=50)
-combo_b1.place(x=50 ,y=150)
 
 class Hotel:
-    
-    def __init__(self, root, cena, postele, velkost, kupelna, minibar, klima):
+
+    def __init__(self, druh_izby: str,cena: float, velkosť_m2: float, postele: int,
+                 minibar: bool, klíma: bool, vaňa: bool):
+        
+        self.druh_izby = druh_izby
+        self.cena = cena
+        self.veľkosť = velkosť_m2
+        self.postele = postele
+        self.minibar = minibar
+        self.klíma = klíma
+        self.vaňa = vaňa
+
+        
         pass
-
-class Izba:
-    pass
-
-class Standart_Izba:
-    pass
-
-class Apartman:
-    pass
-
-
-root.mainloop()
