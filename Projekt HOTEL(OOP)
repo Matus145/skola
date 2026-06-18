@@ -4,33 +4,170 @@ from tkinter import ttk
 
 class Hotel:
 
-    def __init__(self, meno: str,cena: float, velkost_m2: float, postele: int,
+    def __init__(self, meno: str, cena: float, velkost_m2: float, postele: int,
                  minibar: bool, klima: bool, vana: bool):
-        
+
         self.meno = meno
         self.cena = cena
-        self.velkost = velkost_m2
+        self.velkost_m2 = velkost_m2
         self.postele = postele
         self.minibar = minibar
         self.klima = klima
         self.vana = vana
 
-        def get_info(self) -> str:
-            doplnky = []
-            if self.vaňa:
-                doplnky.append("Vaňa")
-            elif self.minibar:
-                doplnky.append("Minibar")
-            elif self.klima:
-                doplnky.append("Klíma")
+    def get_info(self) -> str:
+        doplnky = []
+        if self.vana:
+            doplnky.append("Vaňa")
+        elif self.minibar:
+            doplnky.append("Minibar")
+        elif self.klima:
+            doplnky.append("Klíma")
 
         return (
-            f"{self.meno}\n",
-            f"Cena: {self.cena}€ za noc\n",
-            f"Veľkosť izby: {self.velkost_m2}\n",
-            f"Počeť postelí: {self.postele} m²\n",
+            f"{self.meno}\n"
+            f"Cena: {self.cena}€ za noc\n"
+            f"Veľkosť izby: {self.velkost_m2} m²\n"
+            f"Počet postelí: {self.postele}\n"
             f"Doplnky: {','.join(doplnky) if doplnky else 'Žiadne'}"
         )
 
+class Zakladna(Hotel):
+        
+        def get_info(self) -> str:
+            zakladna = super().get_info()
+            return zakladna + "\nPopis: Základná izba vhodná na krátkodobý pobyt."
+        
+class Standart(Hotel):
+        
+        def get_info(self) -> str:
+            standart = super().get_info()
+            return standart + "\nPopis: Štandardná izba s vyšším komfortom a doplnkami."
+        
+class Apartman(Hotel):
+        
+    def __init__(self, *args, velkost_obyvacka_m2: float = 12.0, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.velkost_obyvacka_m2 = velkost_obyvacka_m2
 
-        pass
+    def get_info(self) -> str:
+        apartman = super().get_info()
+        return apartman + f"\nVeľkosť obývačky: {self.velkost_obyvacka_m2} m²\nPopis: Priestranný apartmán s oddelenou obývacou časťou."
+def tvorenie_izieb():
+    izby = {
+        "Základná": Zakladna(
+            meno="Základná",
+            cena=50.0,
+            velkost_m2=20.0,
+            postele=1,
+            minibar=False,
+            klima=False,
+            vana=False
+        ),
+        "Štandardná": Standart(
+            meno="Štandardná",
+            cena=80.0,
+            velkost_m2=30.0,
+            postele=2,
+            minibar=False,
+            klima=True,
+            vana=False
+        ),
+        "Apartmán": Apartman(
+            meno="Apartmán",
+            cena=120.0,
+            velkost_m2=50.0,
+            postele=3,
+            minibar=True,
+            klima=True,
+            vana=True
+        )
+    }
+    return izby
+def tvorenie_gui(izby: dict):
+     
+     root = tk.Tk()
+     root.title("Hotel MM - Výber izby")
+     root.geometry("800x600")
+
+     label = tk.Label(root, text="Vyberte izbu:")
+     label.pack(pady=10)
+
+     combo_var = tk.StringVar()
+     combo = ttk.Combobox(root, textvariable=combo_var, values=list(izby.keys()), state="readonly",
+                           font=("Arial", 20))
+     combo.pack(pady=30, padx=20)
+
+     btn_frame = tk.Frame(root)
+     btn_frame.pack(pady=10)
+     for meno, izba in izby.items():
+          b = tk.Button(btn_frame, text=meno, width=12, font=("Arial", 12),
+                      command=lambda r=izba: show_room_info(r, info_label))
+          b.pack(side="left", padx=6)
+
+     #def info_btn():
+     #     meno = combo_var.get()
+     #     if meno in izby:
+      #        show_room_info(izby[meno], info_label)
+    
+    # show_btn = tk.Button(root, text="Zobraziť informácie", command=info_btn)
+     #show_btn.pack(pady=10)
+
+     calc_frame = tk.Frame(root)
+     calc_frame.pack(pady=20)
+
+     tk.Label(calc_frame, text="Izby:", font=("Arial", 12)).pack(side="left", padx=(0,4))
+     izby_spin = tk.Spinbox(calc_frame, from_=1, to=10, width=4, font=("Arial", 12))
+     izby_spin.pack(side="left", padx=(0,12))
+
+     tk.Label(calc_frame, text="Noc:", font=("Arial", 12)).pack(side="left", padx=(0,4))
+     noc_spin = tk.Spinbox(calc_frame, from_=1, to=30, width=4, font=("Arial", 12))
+     noc_spin.pack(side="left", padx=(0,12))
+
+     def vypocet_ceny():
+         meno = combo_var.get()
+         if not meno:
+            info_label.config(text="Vyberte izbu.")
+            cena_label.config(text="")
+            return
+         try:
+             pocet_izieb = int(izby_spin.get())
+             pocet_noci = int(noc_spin.get())
+         except ValueError:
+             cena_label.config(text="Zadajte platné čísla pre počet izieb a nocí.")
+             return
+         izba = izby.get(meno)
+         if not izba:
+             cena_label.config(text="Vybraná izba neexistuje.")
+             return
+         total_price = izba.cena * pocet_izieb * pocet_noci
+         cena_label.config(text=f"Celková cena: {total_price}€")
+
+     calc_btn = tk.Button(root, text="Vypočítať cenu", command=vypocet_ceny)
+     calc_btn.pack(pady=10)
+
+     info_label = tk.Label(root, text="Nebola vybraná izba", font=("Arial", 14), justify="left", anchor="nw")
+     info_label.pack(fill="both", expand=True, padx=20, pady=12)
+
+     cena_label = tk.Label(root, text="", font=("Arial", 14), fg="green")
+     cena_label.pack(fill="x", padx=20, pady=(0,12))
+
+     def combo_zmena(event):
+        meno = combo_var.get()
+        if meno in izby:
+            show_room_info(izby[meno], info_label)
+
+     combo.bind("<<ComboboxSelected>>", combo_zmena)
+
+     root.mainloop()
+
+def show_room_info(room: Hotel, label: tk.Label):
+    info = room.get_info()
+    label.config(text=info)
+         
+
+if __name__ == "__main__":
+    izby = tvorenie_izieb()
+    tvorenie_gui(izby)
+
+
